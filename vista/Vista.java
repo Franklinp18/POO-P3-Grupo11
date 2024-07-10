@@ -52,10 +52,10 @@ public class Vista {
                     PersonaBancoController.administrarPersonasBancos();
                     break;
                 case 9:
-                    // ReportesController.mostrarReportes();
+                    ReporteController.mostrarReportes();
                     break;
                 case 10:
-                    // ProyeccionGastosController.mostrarProyeccionGastos();
+                    ReporteController.mostrarProyeccionGastos();
                     break;
                 case 11:
                     System.out.println("Saliendo del sistema...");
