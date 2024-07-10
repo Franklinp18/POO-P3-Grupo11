@@ -6,9 +6,6 @@ import modelo.TransaccionFinanciera;
 import modelo.entidades.Banco;
 import modelo.entidades.Entidad;
 import modelo.entidades.Persona;
-import modelo.enums.TipoEntidad;
-import modelo.modelo2.Inversion;
-import modelo.modelo2.ProcesoBancario;
 
 import java.util.Iterator;
 import java.util.List;
@@ -16,29 +13,31 @@ import java.util.Scanner;
 
 public class PersonaBancoController {
     private static final List<Entidad> listaEntidades = ProcesoBancarioController.getListaEntidades();
+    private static final List<TransaccionFinanciera> listaTransaccionFinanciera = TransaccionFinancieraController.getListaTransaccionFinanciera();
 
     public static void administrarPersonasBancos() {
         int opcion = 0;
+        Scanner sc = new Scanner(System.in);
 
-        while (opcion != 3) {
+        while (true) {
             mostrarPersonasBancos();
             System.out.println("Opciones:");
             System.out.println("1. Registrar Persona/Banco");
             System.out.println("2. Eliminar");
             System.out.println("3. Regresar al Menú principal");
             System.out.print("\nIngrese una opción: ");
-            opcion = leerEntero();
+            opcion = leerEntero(sc);
 
             switch (opcion) {
                 case 1:
-                    registrarPersonaBanco();
+                    registrarPersonaBanco(sc);
                     break;
                 case 2:
-                    eliminarPersonaBanco();
+                    eliminarPersonaBanco(sc);
                     break;
                 case 3:
                     System.out.println("Regresando al menú principal...");
-                    break;
+                    return;
                 default:
                     System.out.println("Número no válido");
                     break;
@@ -53,8 +52,7 @@ public class PersonaBancoController {
         }
     }
 
-    private static int leerEntero() {
-        Scanner sc = new Scanner(System.in);
+    private static int leerEntero(Scanner sc) {
         while (!sc.hasNextInt()) {
             System.out.println("Entrada inválida. Por favor, ingrese un número.");
             sc.next();
@@ -64,8 +62,7 @@ public class PersonaBancoController {
         return numero;
     }
 
-    private static void registrarPersonaBanco() {
-        Scanner sc = new Scanner(System.in);
+    private static void registrarPersonaBanco(Scanner sc) {
         System.out.print("Registrar Persona o Banco ingrese: p/b: ");
         String ingreso = sc.nextLine();
         String cedula, nombre, telefono, email;
@@ -101,8 +98,7 @@ public class PersonaBancoController {
         }
     }
 
-    private static void eliminarPersonaBanco() {
-        Scanner sc = new Scanner(System.in);
+    private static void eliminarPersonaBanco(Scanner sc) {
         System.out.print("Ingrese un número de cédula/RUC: ");
         String cedula = sc.nextLine();
         boolean confirmacionGeneral = false;
@@ -124,9 +120,30 @@ public class PersonaBancoController {
             }
         }
 
+        if (confirmacionGeneral) {
+            eliminarTransaccionesAsociadas(cedula);
+        } else {
+            System.out.println("No se encontró una entidad con el número de cédula/RUC proporcionado.");
+        }
+    }
 
+    private static void eliminarTransaccionesAsociadas(String cedula) {
+        Iterator<TransaccionFinanciera> iterator = listaTransaccionFinanciera.iterator();
 
-
+        while (iterator.hasNext()) {
+            TransaccionFinanciera transaccion = iterator.next();
+            if (transaccion instanceof Prestamo) {
+                Prestamo prestamo = (Prestamo) transaccion;
+                if (prestamo.getDeudor().getNumeroIdentidad().equals(cedula)) {
+                    iterator.remove();
+                }
+            } else if (transaccion instanceof Pago) {
+                Pago pago = (Pago) transaccion;
+                if (pago.getAcredor().getNumeroIdentidad().equals(cedula)) {
+                    iterator.remove();
+                }
+            }
+        }
     }
 
     private static String fechaFormateada() {
