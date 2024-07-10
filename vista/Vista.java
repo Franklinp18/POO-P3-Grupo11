@@ -43,13 +43,13 @@ public class Vista {
                     PagoController.administrarPagos();
                     break;
                 case 6:
-                    // CuentasBancariasController.administrarCuentasBancarias();
+                    CuentaBancariaController.administrarCuentasBancarias();
                     break;
                 case 7:
-                    // InversionesController.administrarInversiones();
+                    InversionController.administrarInversiones();
                     break;
                 case 8:
-                    // PersonasBancosController.administrarPersonasBancos();
+                    PersonaBancoController.administrarPersonasBancos();
                     break;
                 case 9:
                     // ReportesController.mostrarReportes();

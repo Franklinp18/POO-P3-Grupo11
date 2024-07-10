@@ -1,6 +1,6 @@
 package modelo.enums;
 
-public enum TipoAcredor {
+public enum TipoEntidad {
     PERSONA,
     BANCO;
 }
