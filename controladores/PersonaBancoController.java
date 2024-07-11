@@ -12,9 +12,12 @@ import java.util.List;
 import java.util.Scanner;
 
 public class PersonaBancoController {
-    private static final List<Entidad> listaEntidades = ProcesoBancarioController.getListaEntidades();
     private static final List<TransaccionFinanciera> listaTransaccionFinanciera = TransaccionFinancieraController.getListaTransaccionFinanciera();
 
+    /**
+     * Administra las opciones relacionadas con personas y bancos, permitiendo registrar y eliminar
+     * personas/bancos y regresar al menú principal.
+     */
     public static void administrarPersonasBancos() {
         int opcion = 0;
         Scanner sc = new Scanner(System.in);
@@ -45,13 +48,37 @@ public class PersonaBancoController {
         }
     }
 
+    /**
+     * Muestra la lista de personas y bancos registrados.
+     */
     private static void mostrarPersonasBancos() {
         System.out.printf("%-10s %-15s %-20s %-25s %-25s %-15s %n", "Código", "Fecha registro", "Identificación", "Nombre", "Email", "Otros datos");
+
+        List<Entidad> listaEntidades = ProcesoBancarioController.getListaEntidades();
+
         for (Entidad entidad : listaEntidades) {
-            System.out.println(entidad.mostrarInformacion());
+            String otrosDatos = "";
+            if (entidad instanceof Persona) {
+                otrosDatos = "Teléfono: " + ((Persona) entidad).getTelefono();
+            } else if (entidad instanceof Banco) {
+                otrosDatos = "Oficial de Crédito: " + ((Banco) entidad).getNombreOficialCredito() + " Teléfono Oficial: " + ((Banco) entidad).getTelefonoOficialCredito();
+            }
+            System.out.printf("%-10s %-15s %-20s %-25s %-25s %-15s %n",
+                    entidad.getCodigo(),
+                    entidad.getFechaRegistro() != null ? entidad.getFechaRegistro() : "null",
+                    entidad.getNumeroIdentidad(),
+                    entidad.getNombre(),
+                    entidad.getEmail(),
+                    otrosDatos);
         }
     }
 
+    /**
+     * Lee un número entero desde el teclado, asegurándose de que la entrada sea válida.
+     *
+     * @param sc el objeto Scanner para leer la entrada del usuario.
+     * @return el número entero leído.
+     */
     private static int leerEntero(Scanner sc) {
         while (!sc.hasNextInt()) {
             System.out.println("Entrada inválida. Por favor, ingrese un número.");
@@ -62,12 +89,17 @@ public class PersonaBancoController {
         return numero;
     }
 
+    /**
+     * Permite registrar una nueva persona o banco, solicitando los datos necesarios al usuario.
+     *
+     * @param sc el objeto Scanner para leer la entrada del usuario.
+     */
     private static void registrarPersonaBanco(Scanner sc) {
         System.out.print("Registrar Persona o Banco ingrese: p/b: ");
         String ingreso = sc.nextLine();
         String cedula, nombre, telefono, email;
 
-        if (ingreso.equals("p")) {
+        if (ingreso.equalsIgnoreCase("p")) {
             System.out.print("Ingrese su cédula: ");
             cedula = sc.nextLine();
             System.out.print("Ingrese su nombre: ");
@@ -76,34 +108,43 @@ public class PersonaBancoController {
             telefono = sc.nextLine();
             System.out.print("Ingrese su email: ");
             email = sc.nextLine();
-            Persona persona = new Persona(nombre, email, cedula, fechaFormateada(), telefono);
-            listaEntidades.add(persona);
-        } else if (ingreso.equals("b")) {
+            String fechaRegistro = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            Persona persona = new Persona(nombre, email, cedula, fechaRegistro, telefono);
+            ProcesoBancarioController.agregarEntidad(persona);
+            System.out.println("Persona registrada correctamente.");
+        } else if (ingreso.equalsIgnoreCase("b")) {
             System.out.print("Ingrese el RUC del banco: ");
             cedula = sc.nextLine();
             System.out.print("Ingrese el nombre del banco: ");
             nombre = sc.nextLine();
-            System.out.print("Ingrese el teléfono del banco: ");
-            telefono = sc.nextLine();
             System.out.print("Ingrese el email del banco: ");
             email = sc.nextLine();
             System.out.print("Ingrese el nombre del oficial de crédito: ");
             String nombreOficialCredito = sc.nextLine();
             System.out.print("Ingrese el teléfono del oficial de crédito: ");
             String telefonoOficialCredito = sc.nextLine();
-            Banco banco = new Banco(nombre, email, cedula, fechaFormateada(), nombreOficialCredito, telefonoOficialCredito);
-            listaEntidades.add(banco);
+            String fechaRegistro = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            Banco banco = new Banco(nombre, email, cedula, fechaRegistro, nombreOficialCredito, telefonoOficialCredito);
+            ProcesoBancarioController.agregarEntidad(banco);
+            System.out.println("Banco registrado correctamente.");
         } else {
             System.out.println("Ingreso una opción no válida.");
         }
     }
 
+    /**
+     * Elimina una persona o banco de la lista de entidades, y también elimina sus transacciones asociadas.
+     *
+     * @param sc el objeto Scanner para leer la entrada del usuario.
+     */
     private static void eliminarPersonaBanco(Scanner sc) {
         System.out.print("Ingrese un número de cédula/RUC: ");
         String cedula = sc.nextLine();
         boolean confirmacionGeneral = false;
-        Iterator<Entidad> iterator = listaEntidades.iterator();
 
+        // Eliminar de la lista de entidades
+        List<Entidad> listaEntidades = ProcesoBancarioController.getListaEntidades();
+        Iterator<Entidad> iterator = listaEntidades.iterator();
         while (iterator.hasNext()) {
             Entidad entidad = iterator.next();
             if (entidad.getNumeroIdentidad().equals(cedula)) {
@@ -127,6 +168,11 @@ public class PersonaBancoController {
         }
     }
 
+    /**
+     * Elimina las transacciones financieras asociadas a una persona o banco.
+     *
+     * @param cedula el número de cédula/RUC de la persona o banco cuyas transacciones se desean eliminar.
+     */
     private static void eliminarTransaccionesAsociadas(String cedula) {
         Iterator<TransaccionFinanciera> iterator = listaTransaccionFinanciera.iterator();
 
@@ -144,10 +190,5 @@ public class PersonaBancoController {
                 }
             }
         }
-    }
-
-    private static String fechaFormateada() {
-        // Lógica para obtener la fecha actual formateada
-        return "07/10/2024"; // Fecha actual
     }
 }

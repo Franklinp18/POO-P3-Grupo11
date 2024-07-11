@@ -14,6 +14,9 @@ import java.util.Scanner;
 
 public class CuentaBancariaController {
 
+    /**
+     * Administra las opciones relacionadas con las cuentas bancarias, permitiendo registrar, eliminar, cerrar cuentas y regresar al menú principal.
+     */
     public static void administrarCuentasBancarias() {
         int opcion = 0;
         Scanner sc = new Scanner(System.in);
@@ -48,6 +51,9 @@ public class CuentaBancariaController {
         }
     }
 
+    /**
+     * Muestra la lista de cuentas bancarias registradas.
+     */
     private static void mostrarCuentasBancarias() {
         System.out.printf("%-10s %-30s %-15s %-15s %-15s %n", "Codigo", "Entidad Bancaria", "Tipo", "Numero", "Saldo");
         List<ProcesoBancario> listaProcesosBancarios = ProcesoBancarioController.getListaProcesosBancarios();
@@ -58,6 +64,12 @@ public class CuentaBancariaController {
         }
     }
 
+    /**
+     * Lee un número entero desde el teclado, asegurándose de que la entrada sea válida.
+     *
+     * @param sc el objeto Scanner para leer la entrada del usuario.
+     * @return el número entero leído.
+     */
     private static int leerEntero(Scanner sc) {
         while (!sc.hasNextInt()) {
             System.out.println("Entrada inválida. Por favor, ingrese un número.");
@@ -68,6 +80,11 @@ public class CuentaBancariaController {
         return numero;
     }
 
+    /**
+     * Permite registrar una nueva cuenta bancaria, solicitando los datos necesarios al usuario.
+     *
+     * @param sc el objeto Scanner para leer la entrada del usuario.
+     */
     private static void registrarCuenta(Scanner sc) {
         System.out.print("Ingrese el nombre o ruc de la entidad bancaria: ");
         String identificador = sc.nextLine();
@@ -104,6 +121,11 @@ public class CuentaBancariaController {
         }
     }
 
+    /**
+     * Elimina una cuenta bancaria existente, solicitando el código de la cuenta al usuario.
+     *
+     * @param sc el objeto Scanner para leer la entrada del usuario.
+     */
     private static void eliminarCuenta(Scanner sc) {
         System.out.print("Ingrese el código de la cuenta: ");
         int codigo = sc.nextInt();
@@ -137,6 +159,11 @@ public class CuentaBancariaController {
         }
     }
 
+    /**
+     * Finaliza una cuenta bancaria existente, solicitando el código de la cuenta y la fecha de cierre al usuario.
+     *
+     * @param sc el objeto Scanner para leer la entrada del usuario.
+     */
     private static void cerrarCuenta(Scanner sc) {
         System.out.print("Ingrese el código de la cuenta que desea finalizar: ");
         int codigo = sc.nextInt();
@@ -161,6 +188,12 @@ public class CuentaBancariaController {
         }
     }
 
+    /**
+     * Busca un banco por su nombre o RUC.
+     *
+     * @param identificador el nombre o RUC del banco a buscar.
+     * @return el banco encontrado, o null si no se encuentra ningún banco con el identificador proporcionado.
+     */
     private static Banco buscarBanco(String identificador) {
         List<Entidad> listaEntidades = ProcesoBancarioController.getListaEntidades();
         for (Entidad entidad : listaEntidades) {

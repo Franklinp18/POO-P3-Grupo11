@@ -9,6 +9,9 @@ import java.util.Scanner;
 
 public class PagoController {
 
+    /**
+     * Administra las opciones relacionadas con los pagos, permitiendo registrar pagos y regresar al menú principal.
+     */
     public static void administrarPagos() {
         int opcion = 0;
         Scanner sc = new Scanner(System.in);
@@ -36,6 +39,9 @@ public class PagoController {
         }
     }
 
+    /**
+     * Muestra la lista de pagos registrados.
+     */
     private static void mostrarPagos() {
         System.out.printf("%-15s %-20s %-15s %-30s %-20s %-15s%n", "Código", "Acreedor", "Valor", "Descripción", "Fecha de préstamo", "Cuota");
         for (TransaccionFinanciera transaccion : TransaccionFinancieraController.getListaTransaccionFinanciera()) {
@@ -47,6 +53,11 @@ public class PagoController {
         System.out.println("////////////////////////////////////////////");
     }
 
+    /**
+     * Lee un número entero desde el teclado, asegurándose de que la entrada sea válida.
+     *
+     * @return el número entero leído.
+     */
     private static int leerEntero() {
         Scanner sc = new Scanner(System.in);
         while (!sc.hasNextInt()) {
@@ -58,6 +69,9 @@ public class PagoController {
         return numero;
     }
 
+    /**
+     * Permite registrar un nuevo pago, solicitando los datos necesarios al usuario.
+     */
     private static void registrarPago() {
         Scanner sc = new Scanner(System.in);
         System.out.print("Ingrese el número de identidad: ");
@@ -122,6 +136,12 @@ public class PagoController {
         System.out.println("Pago registrado correctamente.");
     }
 
+    /**
+     * Busca una entidad por su número de identidad.
+     *
+     * @param identidad el número de identidad de la entidad a buscar.
+     * @return la entidad encontrada, o null si no se encuentra ninguna entidad con el número de identidad proporcionado.
+     */
     private static Entidad buscarEntidadPorIdentidad(String identidad) {
         List<Persona> listaPersonas = PersonaController.getListaPersonas();
         for (Persona persona : listaPersonas) {

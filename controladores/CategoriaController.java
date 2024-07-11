@@ -18,7 +18,9 @@ public class CategoriaController {
         listaCategorias.add(new Categoria(TipoCategoria.INGRESO, "Premios"));
     }
 
-
+    /**
+     * Administra las opciones relacionadas con las categorías, permitiendo agregar, eliminar categorías y regresar al menú principal.
+     */
     public static void administrarCategorias() {
         Scanner sc = new Scanner(System.in);
         int opcion = 0;
@@ -122,6 +124,12 @@ public class CategoriaController {
         }
     }
 
+    /**
+     * Lee un número entero desde el teclado, asegurándose de que la entrada sea válida.
+     *
+     * @param sc el objeto Scanner para leer la entrada del usuario.
+     * @return el número entero leído.
+     */
     private static int leerEntero(Scanner sc) {
         while (!sc.hasNextInt()) {
             System.out.println("Entrada inválida. Por favor, ingrese un número.");
@@ -132,6 +140,11 @@ public class CategoriaController {
         return numero;
     }
 
+    /**
+     * Obtiene la lista de categorías.
+     *
+     * @return la lista de categorías.
+     */
     public static List<Categoria> getListaCategorias() {
         return listaCategorias;
     }

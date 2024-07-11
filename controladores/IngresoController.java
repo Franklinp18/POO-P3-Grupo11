@@ -9,6 +9,9 @@ import java.util.Scanner;
 
 public class IngresoController {
 
+    /**
+     * Administra las opciones relacionadas con los ingresos, permitiendo registrar, eliminar, finalizar ingresos y regresar al menú principal.
+     */
     public static void administrarIngresos() {
         int opcion = 0;
 
@@ -43,6 +46,9 @@ public class IngresoController {
         }
     }
 
+    /**
+     * Muestra la lista de ingresos registrados.
+     */
     private static void mostrarIngresos() {
         System.out.printf("%-10s %-30s %-15s %-15s %-15s %-15s %-15s%n", "Código", "Descripción", "Valor", "Fecha inicio", "Fecha fin", "Categoría", "Repetición");
         for (TransaccionFinanciera transaccion : TransaccionFinancieraController.getListaTransaccionFinanciera()) {
@@ -54,6 +60,11 @@ public class IngresoController {
         System.out.println("////////////////////////////////////////////");
     }
 
+    /**
+     * Lee un número entero desde el teclado, asegurándose de que la entrada sea válida.
+     *
+     * @return el número entero leído.
+     */
     private static int leerEntero() {
         Scanner sc = new Scanner(System.in);
         while (!sc.hasNextInt()) {
@@ -65,6 +76,9 @@ public class IngresoController {
         return numero;
     }
 
+    /**
+     * Permite registrar un nuevo ingreso, solicitando los datos necesarios al usuario.
+     */
     private static void registrarIngreso() {
         Scanner sc = new Scanner(System.in);
         System.out.print("Ingrese una categoría ya registrada: ");
@@ -102,6 +116,9 @@ public class IngresoController {
         }
     }
 
+    /**
+     * Elimina un ingreso existente, solicitando el código del ingreso al usuario.
+     */
     private static void eliminarIngreso() {
         Scanner sc = new Scanner(System.in);
         System.out.print("Ingrese el código del ingreso a eliminar: ");
@@ -116,6 +133,9 @@ public class IngresoController {
         }
     }
 
+    /**
+     * Finaliza un ingreso existente, solicitando el código del ingreso y la fecha de finalización al usuario.
+     */
     private static void finalizarIngreso() {
         Scanner sc = new Scanner(System.in);
         System.out.print("Ingrese el código del ingreso que desea finalizar: ");

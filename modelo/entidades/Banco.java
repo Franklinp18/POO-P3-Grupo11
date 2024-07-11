@@ -1,5 +1,7 @@
 package modelo.entidades;
 
+import java.time.LocalDate;
+
 public class Banco extends Entidad {
     private String nombreOficialCredito;
     private String telefonoOficialCredito;
@@ -8,6 +10,13 @@ public class Banco extends Entidad {
         super(nombre, email, numeroIdentidad);
         this.nombreOficialCredito = nombreOficialCredito;
         this.telefonoOficialCredito = telefonoOficialCredito;
+    }
+
+    public Banco(String nombre, String email, String cedula, LocalDate fechaRegistro) {
+        super();
+    }
+
+    public Banco(String nombre, String email, String cedula, String fechaRegistro) {
     }
 
     public String getNombreOficialCredito() {

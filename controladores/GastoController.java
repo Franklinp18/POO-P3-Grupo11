@@ -10,6 +10,9 @@ import java.util.Scanner;
 
 public class GastoController {
 
+    /**
+     * Administra las opciones relacionadas con los gastos, permitiendo registrar, eliminar, finalizar gastos y regresar al menú principal.
+     */
     public static void administrarGastos() {
         int opcion = 0;
 
@@ -44,6 +47,9 @@ public class GastoController {
         }
     }
 
+    /**
+     * Muestra la lista de gastos registrados.
+     */
     private static void mostrarGastos() {
         System.out.printf("%-10s %-30s %-15s %-15s %-15s %-15s %-15s%n", "Código", "Descripción", "Valor", "Fecha inicio", "Fecha fin", "Categoría", "Repetición");
         for (TransaccionFinanciera transaccion : TransaccionFinancieraController.getListaTransaccionFinanciera()) {
@@ -55,6 +61,11 @@ public class GastoController {
         System.out.println("////////////////////////////////////////////");
     }
 
+    /**
+     * Lee un número entero desde el teclado, asegurándose de que la entrada sea válida.
+     *
+     * @return el número entero leído.
+     */
     private static int leerEntero() {
         Scanner sc = new Scanner(System.in);
         while (!sc.hasNextInt()) {
@@ -66,6 +77,9 @@ public class GastoController {
         return numero;
     }
 
+    /**
+     * Permite registrar un nuevo gasto, solicitando los datos necesarios al usuario.
+     */
     private static void registrarGasto() {
         Scanner sc = new Scanner(System.in);
         System.out.print("Ingrese una categoría ya registrada: ");
@@ -103,6 +117,9 @@ public class GastoController {
         }
     }
 
+    /**
+     * Elimina un gasto existente, solicitando el código del gasto al usuario.
+     */
     private static void eliminarGasto() {
         Scanner sc = new Scanner(System.in);
         System.out.print("Ingrese el código del gasto a eliminar: ");
@@ -135,6 +152,9 @@ public class GastoController {
         }
     }
 
+    /**
+     * Finaliza un gasto existente, solicitando el código del gasto y la fecha de finalización al usuario.
+     */
     private static void finalizarGasto() {
         Scanner sc = new Scanner(System.in);
         System.out.print("Ingrese el código del gasto que desea finalizar: ");

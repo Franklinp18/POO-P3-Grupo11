@@ -1,6 +1,7 @@
 package controladores;
 
 import modelo.Gasto;
+import modelo.Ingreso;
 import modelo.TransaccionFinanciera;
 
 import java.time.LocalDate;
@@ -10,6 +11,9 @@ import java.util.*;
 
 public class ReporteController {
 
+    /**
+     * Muestra las opciones de reportes disponibles y ejecuta la selección del usuario.
+     */
     public static void mostrarReportes() {
         Scanner sc = new Scanner(System.in);
         int opcion = 0;
@@ -18,8 +22,7 @@ public class ReporteController {
             System.out.println("Opciones de Reporte:");
             System.out.println("1. Reporte de Ingresos");
             System.out.println("2. Reporte de Gastos");
-            System.out.println("3. Proyección de Gastos");
-            System.out.println("4. Regresar al Menú Principal");
+            System.out.println("3. Regresar al Menú Principal");
             System.out.print("Ingrese una opción: ");
             opcion = leerEntero(sc);
 
@@ -31,9 +34,6 @@ public class ReporteController {
                     mostrarReporteGastos();
                     break;
                 case 3:
-                    mostrarProyeccionGastos();
-                    break;
-                case 4:
                     System.out.println("Regresando al menú principal...");
                     break;
                 default:
@@ -43,6 +43,12 @@ public class ReporteController {
         }
     }
 
+    /**
+     * Lee un entero del Scanner, asegurándose de que la entrada sea válida.
+     *
+     * @param scanner el Scanner para leer la entrada del usuario.
+     * @return el entero leído.
+     */
     private static int leerEntero(Scanner scanner) {
         while (!scanner.hasNextInt()) {
             System.out.println("Entrada inválida. Por favor, ingrese un número.");
@@ -53,56 +59,131 @@ public class ReporteController {
         return numero;
     }
 
+    /**
+     * Muestra el reporte de ingresos basado en la selección del usuario (mes actual o año).
+     */
     private static void mostrarReporteIngresos() {
         LocalDate fechaActual = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String fechaFormateada = fechaActual.format(formatter);
 
         System.out.println("9.1 Reporte de Ingresos");
         System.out.println("Seleccionar Período:");
         System.out.println("1. Mes actual");
         System.out.println("2. Año");
-        System.out.println("Ingrese una opción:");
+        System.out.print("Ingrese una opción: ");
 
         Scanner sc = new Scanner(System.in);
         int opcion = leerEntero(sc);
 
+        List<Ingreso> ingresos = obtenerIngresos();
+
         if (opcion == 1) {
-            System.out.println("Mes actual: " + fechaActual.getMonth());
-            // Lógica para mostrar ingresos del mes actual
-        } else if (opcion == 2) {
-            System.out.println("Año actual: " + fechaActual.getYear());
-            // Lógica para mostrar ingresos del año actual
+            System.out.println("Mes actual: " + fechaActual.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()));
+            mostrarIngresosPorMes(ingresos, fechaActual.getMonthValue(), fechaActual.getYear());
         } else {
             System.out.println("Opción no válida.");
         }
     }
 
+    /**
+     * Muestra el reporte de gastos basado en la selección del usuario (mes actual o año).
+     */
     private static void mostrarReporteGastos() {
         LocalDate fechaActual = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String fechaFormateada = fechaActual.format(formatter);
 
         System.out.println("9.2 Reporte de Gastos");
         System.out.println("Seleccionar Período:");
         System.out.println("1. Mes actual");
         System.out.println("2. Año");
-        System.out.println("Ingrese una opción:");
+        System.out.print("Ingrese una opción: ");
 
         Scanner sc = new Scanner(System.in);
         int opcion = leerEntero(sc);
 
+        List<Gasto> gastos = obtenerGastos();
+
         if (opcion == 1) {
-            System.out.println("Mes actual: " + fechaActual.getMonth());
-            // Lógica para mostrar gastos del mes actual
-        } else if (opcion == 2) {
-            System.out.println("Año actual: " + fechaActual.getYear());
-            // Lógica para mostrar gastos del año actual
+            System.out.println("Mes actual: " + fechaActual.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()));
+            mostrarGastosPorMes(gastos, fechaActual.getMonthValue(), fechaActual.getYear());
         } else {
             System.out.println("Opción no válida.");
         }
     }
 
+    /**
+     * Obtiene la lista de ingresos desde el controlador de transacciones financieras.
+     *
+     * @return una lista de ingresos.
+     */
+    private static List<Ingreso> obtenerIngresos() {
+        List<Ingreso> ingresos = new ArrayList<>();
+        for (TransaccionFinanciera transaccion : TransaccionFinancieraController.getListaTransaccionFinanciera()) {
+            if (transaccion instanceof Ingreso) {
+                ingresos.add((Ingreso) transaccion);
+            }
+        }
+        return ingresos;
+    }
+
+    /**
+     * Obtiene la lista de gastos desde el controlador de transacciones financieras.
+     *
+     * @return una lista de gastos.
+     */
+    private static List<Gasto> obtenerGastos() {
+        List<Gasto> gastos = new ArrayList<>();
+        for (TransaccionFinanciera transaccion : TransaccionFinancieraController.getListaTransaccionFinanciera()) {
+            if (transaccion instanceof Gasto) {
+                gastos.add((Gasto) transaccion);
+            }
+        }
+        return gastos;
+    }
+
+    /**
+     * Muestra los ingresos para un mes y año específicos.
+     *
+     * @param ingresos la lista de ingresos.
+     * @param mes el mes a filtrar.
+     * @param ano el año a filtrar.
+     */
+    private static void mostrarIngresosPorMes(List<Ingreso> ingresos, int mes, int ano) {
+        double total = 0;
+        System.out.println("Categoría        Valor");
+        for (Ingreso ingreso : ingresos) {
+            LocalDate fechaIngreso = LocalDate.parse(ingreso.getFechaInicio(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            if (fechaIngreso.getMonthValue() == mes && fechaIngreso.getYear() == ano) {
+                System.out.printf("%-15s %.2f%n", ingreso.getCategoria().getNombre(), ingreso.getValor());
+                total += ingreso.getValor();
+            }
+        }
+        System.out.printf("Total            %.2f%n", total);
+    }
+
+    /**
+     * Muestra los gastos para un mes y año específicos.
+     *
+     * @param gastos la lista de gastos.
+     * @param mes el mes a filtrar.
+     * @param ano el año a filtrar.
+     */
+    private static void mostrarGastosPorMes(List<Gasto> gastos, int mes, int ano) {
+        double total = 0;
+        System.out.println("Categoría        Valor");
+        for (Gasto gasto : gastos) {
+            LocalDate fechaGasto = LocalDate.parse(gasto.getFechaInicio(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            if (fechaGasto.getMonthValue() == mes && fechaGasto.getYear() == ano) {
+                System.out.printf("%-15s %.2f%n", gasto.getCategoria().getNombre(), gasto.getValor());
+                total += gasto.getValor();
+            }
+        }
+        System.out.printf("Total            %.2f%n", total);
+    }
+
+    /**
+     * Muestra la proyección de gastos para el siguiente mes, basado en los tres meses anteriores.
+     */
     public static void mostrarProyeccionGastos() {
         LocalDate fechaActual = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -130,7 +211,6 @@ public class ReporteController {
                 try {
                     LocalDate fechaGasto = LocalDate.parse(gasto.getFechaInicio(), formatter);
                     LocalDate fechaFinGasto = gasto.getFechaFin().isEmpty() ? mesSiguienteInicio : LocalDate.parse(gasto.getFechaFin(), formatter);
-                    System.out.println("Procesando gasto: " + gasto.getValor() + " Fecha: " + fechaGasto + " Fecha Fin: " + fechaFinGasto);  // Depuración
                     while (fechaGasto.isBefore(mesSiguienteInicio) && (fechaFinGasto.isAfter(fechaGasto) || fechaFinGasto.isEqual(fechaGasto))) {
                         if ((fechaGasto.isEqual(mesAnterior3Inicio) || fechaGasto.isAfter(mesAnterior3Inicio)) && fechaGasto.isBefore(mesSiguienteInicio)) {
                             String categoria = gasto.getCategoria().getNombre();
@@ -164,25 +244,5 @@ public class ReporteController {
 
             System.out.printf("%-20s %-10.2f %-10.2f %-10.2f %-10.2f %n", categoria, mes1, mes2, mes3, promedio);
         }
-
-
-        // Para depuración
-        System.out.println("Detalles de los gastos capturados:");
-        for (Map.Entry<String, List<Double>> entry : categoriasGastos.entrySet()) {
-            System.out.println("Categoría: " + entry.getKey() + ", Valores: " + entry.getValue());
-        }
     }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
+}

@@ -15,6 +15,10 @@ public abstract class Entidad {
         this.numeroIdentidad = numeroIdentidad;
     }
 
+    public Entidad() {
+
+    }
+
     public int getCodigo() {
         return codigo;
     }

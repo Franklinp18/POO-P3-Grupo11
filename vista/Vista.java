@@ -1,10 +1,14 @@
 package vista;
+
 import controladores.*;
 
 import java.util.Scanner;
 
 public class Vista {
 
+    /**
+     * Muestra el menú principal del sistema de control de finanzas personales y maneja la navegación del usuario a través de las diferentes opciones.
+     */
     public static void mostrarMenuPrincipal() {
         int opcion = 0;
         Scanner scanner = new Scanner(System.in);
@@ -67,7 +71,12 @@ public class Vista {
         }
     }
 
-
+    /**
+     * Lee un número entero desde el teclado, asegurándose de que la entrada sea válida.
+     *
+     * @param scanner el objeto Scanner para leer la entrada del usuario.
+     * @return el número entero leído.
+     */
     private static int leerEntero(Scanner scanner) {
         while (!scanner.hasNextInt()) {
             System.out.println("Entrada inválida. Por favor, ingrese un número.");
@@ -77,6 +86,7 @@ public class Vista {
         scanner.nextLine();
         return numero;
     }
+
 
     public static void main(String[] args) {
         mostrarMenuPrincipal();

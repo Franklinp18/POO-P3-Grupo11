@@ -11,6 +11,9 @@ import java.util.Scanner;
 
 public class InversionController {
 
+    /**
+     * Administra las opciones relacionadas con las inversiones, permitiendo registrar y eliminar inversiones, y regresar al menú principal.
+     */
     public static void administrarInversiones() {
         int opcion = 0;
         Scanner sc = new Scanner(System.in);
@@ -44,6 +47,11 @@ public class InversionController {
         }
     }
 
+    /**
+     * Muestra la lista de inversiones registradas.
+     *
+     * @param listaProcesosBancarios la lista de procesos bancarios, incluyendo inversiones.
+     */
     private static void mostrarInversiones(List<ProcesoBancario> listaProcesosBancarios) {
         System.out.printf("%-10s %-30s %-15s %-15s %-15s %-15s%n", "Código", "Entidad Bancaria", "Fecha apertura", "Cantidad", "Interés mensual", "Fecha finalización");
         for (ProcesoBancario procesoBancario : listaProcesosBancarios) {
@@ -55,6 +63,13 @@ public class InversionController {
         System.out.println("////////////////////////////////////////////");
     }
 
+    /**
+     * Permite registrar una nueva inversión, solicitando los datos necesarios al usuario.
+     *
+     * @param sc el objeto Scanner para leer la entrada del usuario.
+     * @param listaProcesosBancarios la lista de procesos bancarios, incluyendo inversiones.
+     * @param listaEntidades la lista de entidades bancarias.
+     */
     private static void registrarInversion(Scanner sc, List<ProcesoBancario> listaProcesosBancarios, List<Entidad> listaEntidades) {
         System.out.print("Ingrese el nombre o ruc de la entidad bancaria: ");
         String identificador = sc.nextLine();
@@ -90,6 +105,12 @@ public class InversionController {
         }
     }
 
+    /**
+     * Permite eliminar una inversión existente, solicitando el código de la inversión al usuario.
+     *
+     * @param sc el objeto Scanner para leer la entrada del usuario.
+     * @param listaProcesosBancarios la lista de procesos bancarios, incluyendo inversiones.
+     */
     private static void eliminarInversion(Scanner sc, List<ProcesoBancario> listaProcesosBancarios) {
         System.out.print("Ingrese el código de la inversión a eliminar: ");
         int codigo = sc.nextInt();

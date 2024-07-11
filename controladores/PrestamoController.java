@@ -9,6 +9,10 @@ import java.util.Scanner;
 
 public class PrestamoController {
 
+    /**
+     * Administra las opciones relacionadas con los préstamos, permitiendo registrar nuevos préstamos
+     * y regresar al menú principal.
+     */
     public static void administrarPrestamos() {
         int opcion = 0;
         Scanner sc = new Scanner(System.in);
@@ -36,6 +40,9 @@ public class PrestamoController {
         }
     }
 
+    /**
+     * Muestra la lista de préstamos registrados.
+     */
     private static void mostrarPrestamos() {
         System.out.printf("%-15s %-15s %-15s %-30s %-20s %-15s%n", "Código", "Deudor", "Valor", "Descripción", "Fecha Préstamo", "Cuota");
         for (TransaccionFinanciera transaccion : TransaccionFinancieraController.getListaTransaccionFinanciera()) {
@@ -47,6 +54,11 @@ public class PrestamoController {
         System.out.println("////////////////////////////////////////////");
     }
 
+    /**
+     * Lee un número entero desde el teclado, asegurándose de que la entrada sea válida.
+     *
+     * @return el número entero leído.
+     */
     private static int leerEntero() {
         Scanner sc = new Scanner(System.in);
         while (!sc.hasNextInt()) {
@@ -58,6 +70,10 @@ public class PrestamoController {
         return numero;
     }
 
+    /**
+     * Permite registrar un nuevo préstamo, solicitando los datos necesarios al usuario.
+     * Si la persona deudora no está registrada, permite registrarla.
+     */
     private static void registrarPrestamo() {
         Scanner sc = new Scanner(System.in);
         System.out.print("Ingrese el número de cédula: ");
@@ -108,6 +124,12 @@ public class PrestamoController {
         System.out.println("Préstamo registrado correctamente.");
     }
 
+    /**
+     * Busca una persona en la lista de personas registradas por su número de cédula.
+     *
+     * @param cedula el número de cédula de la persona a buscar.
+     * @return la persona encontrada, o null si no se encuentra.
+     */
     private static Persona buscarPersonaPorCedula(String cedula) {
         List<Persona> listaPersonas = PersonaController.getListaPersonas();
         for (Persona persona : listaPersonas) {

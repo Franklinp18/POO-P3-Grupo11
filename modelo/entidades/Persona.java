@@ -6,7 +6,7 @@ public class Persona extends Entidad {
 
     public Persona(String nombre, String email, String numeroIdentidad, String fechaRegistro, String telefono) {
         super(nombre, email, numeroIdentidad);
-        this.fechaRegistro = fechaRegistro;
+        this.fechaRegistro = String.valueOf(fechaRegistro);
         this.telefono = telefono;
     }
 

@@ -37,14 +37,30 @@ public class TransaccionFinancieraController {
         listaTransaccionFinanciera.add(pago1);
     }
 
+    /**
+     * Obtiene la lista de todas las transacciones financieras.
+     *
+     * @return una lista de transacciones financieras.
+     */
     public static List<TransaccionFinanciera> getListaTransaccionFinanciera() {
         return listaTransaccionFinanciera;
     }
 
+    /**
+     * Agrega una nueva transacción financiera a la lista.
+     *
+     * @param transaccion la transacción financiera a agregar.
+     */
     public static void agregarTransaccion(TransaccionFinanciera transaccion) {
         listaTransaccionFinanciera.add(transaccion);
     }
 
+    /**
+     * Elimina una transacción financiera de la lista por su código.
+     *
+     * @param codigo el código de la transacción financiera a eliminar.
+     * @return true si la transacción fue eliminada, false si no se encontró.
+     */
     public static boolean eliminarTransaccion(int codigo) {
         Iterator<TransaccionFinanciera> iterator = listaTransaccionFinanciera.iterator();
         while (iterator.hasNext()) {
@@ -57,6 +73,12 @@ public class TransaccionFinancieraController {
         return false;
     }
 
+    /**
+     * Busca una transacción financiera en la lista por su código.
+     *
+     * @param codigo el código de la transacción financiera a buscar.
+     * @return la transacción financiera si se encuentra, o null si no se encuentra.
+     */
     public static TransaccionFinanciera buscarTransaccion(int codigo) {
         for (TransaccionFinanciera transaccion : listaTransaccionFinanciera) {
             if (transaccion.getCodigo() == codigo) {
@@ -65,9 +87,4 @@ public class TransaccionFinancieraController {
         }
         return null;
     }
-
-
 }
-
-
-
